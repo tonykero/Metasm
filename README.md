@@ -2,17 +2,17 @@
 
 [![license](https://img.shields.io/github/license/tonykero/Metasm.svg?style=flat-square)](https://github.com/tonykero/Metasm/blob/master/LICENSE)
 
-Metasm is a very basic interpreted language, indeed, it fits in 16 instructions.
+Metasm is a very basic interpreted language, it fits in 16 instructions.
 
 Though it is also an interpreter and a library, written in C++.
 
 # Overview
 
 This project is firstly made to be used with [Moe](https://github.com/tonykero/Moe),
-but as i write it in an almost generic way i found legitimate to create a repository for it
+but since i'm writing Moe and Metasm in a generic way, i found legitimate to create a repository for each.
 
 
-There is only 1 class for the moment, and 2 main functions to remember
+There is only 1 class for the moment, and 2 main functions to remember.
 
 ```cpp
 #include <Metasm.hpp>
