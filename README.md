@@ -33,8 +33,6 @@ int main()
                         "PUSH 10\n"
                         "SWAP\n"
                         "DIV\n";
-                        // 6
-
     
     engine.loadScript( script_test6 );
     
@@ -56,8 +54,7 @@ void display_stack(const std::stack<int>& _stack)
 }
 ```
 
-The only class is Engine, and the 2 functions are loadScript() & run()
-
+The only class is Engine, and the 2 functions are `loadScript()` & `run()`
 the internal container used to store immediates values and results, is indeed a `std::stack<int>`, for now it only supports ints
 
 ## Building
@@ -66,14 +63,14 @@ Metasm uses CMake
 
 Options         | Description                   | Default Value |
 --------------- | ----------------------------- | ------------- |
-BUILD_SHARED    | builds Moe as SHARED if ON    | OFF           |
+BUILD_SHARED    | builds Metasm as SHARED if ON | OFF           |
 BUILD_EXAMPLES  | build examples                | ON            |
 DEBUG           | Enable debugging symbols      | OFF           |
 
-may supports:
+may supports(untested consistently):
 * Clang 3.4+
 * GCC 4.9+
-* untested with MVC (19.0), should get minor errors
+* MSVC (19.0)
 
 ```
 git clone https://github.com/tonykero/Metasm.git
