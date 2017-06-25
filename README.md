@@ -4,7 +4,7 @@
 
 | GCC / Clang (Linux) |
 | :---: |
-| [![Travis](https://img.shields.io/travis/rust-lang/rust.svg?style=flat-square)](https://travis-ci.org/tonykero/Metasm) |
+| [![Travis](https://img.shields.io/travis/tonykero/Metasm.svg?style=flat-square)](https://travis-ci.org/tonykero/Metasm) |
 
 Metasm is a just-in-time compiler written in C++, it fits in 20 instructions.
 
@@ -20,7 +20,7 @@ but since i'm writing Moe and Metasm in a generic way, i found legitimate to cre
 
 int main()
 {
-    meta::Engine engine(5);
+    meta::Engine engine(5); //the stack array is 5 elements long
 
     std::string script_test6 =
                         "PUSH 5\n"  // 5
@@ -44,6 +44,7 @@ int main()
 ## Building
 
 Metasm uses CMake, and requires libgccjit installed
+> With llvm clang you need g++-6 to be installed
 
 Options         | Description                   | Default Value |
 --------------- | ----------------------------- | ------------- |
