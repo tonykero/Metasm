@@ -8,28 +8,32 @@ int main()
     meta::Engine engine(4);
 
      //square_root
-    std::string script = 
-                    "PUSH 512\n"      //8
-                    "DUP\n"         //8 8
-                    "PUSH 1024\n"       //8 8 16
-                    "DIV\n"         //8 2
-                    "PUSH 512\n"      //8 2 8
-                    "LBL L1\n"      //          5 5 3       
-                    "ADD\n"         //8 10      5 8         
-                    "PUSH 2\n"      //8 10 1    5 9 1     
-                    "SWAP\n"         //8 5       5 5         
-                    "DIV\n"
-                    "JE EXIT\n"     //                      
-                    "SWAP\n"        //5 8       
-                    "POP\n"         //5         
-                    "DUP\n"         //5 5       
-                    "DUP\n"         //5 5 5     
-                    "PUSH 1024\n"     //5 5 5 16  
-                    "DIV\n"         //5 5 3     
-                    "JNE L1\n"      //                      
-                    "LBL EXIT\n"    //                      
-                    "POP\n";        //
-                    
+    std::string script =
+                    "PUSH 2\n"  // 2
+                    "PUSH 8\n"  // 2 8
+                    "PUSH 16\n" // 2 8 16
+                    "PUSH 8\n"  // 2 8 16 8
+                    "SWAP\n"    // 2 8 8 16
+                    "LBL L1\n"  //          // 2 5 5 16
+                    "DIV\n"     // 2 8 2    // 2 5 3
+                    "ADD\n"     // 2 10     // 2 8
+                    "DIV\n"     // 5        // 4
+                    "DUP\n"     // 5 5      // 4 4
+                    "DUP\n"     // 5 5 5    // 4 4 4
+                    "MUL\n"     // 5 25     // 4 16
+                    "PUSH 16\n" // 5 25 16  // 4 16 16
+                    "JE EXIT\n" //          //
+                    "POP\n"     // 5 25
+                    "POP\n"     // 5
+                    "PUSH 2\n"  // 5 2
+                    "SWAP\n"    // 2 5
+                    "DUP\n"     // 2 5 5
+                    "PUSH 16\n" // 2 5 5 16
+                    "JMP L1\n"  
+                    "LBL EXIT\n"            // 4 16 16
+                    "POP\n"                 // 4 16
+                    "POP\n";                // 4
+                                            // but outputs 5 ¯\_(ツ)_/¯
 
     engine.load_script(script);
     engine.compile();
