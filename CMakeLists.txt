@@ -9,7 +9,7 @@ option(DEBUG "Enable debugging symbols" OFF)
 include_directories( "include" )
 
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     
     # using GCC
 
