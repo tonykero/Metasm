@@ -1,39 +1,30 @@
 #include <Metasm.hpp>
 #include <iostream>
 
-void display_stack(const std::stack<int>&);
-
 int main()
 {
-    meta::Engine engine;
+    meta::Engine engine(5);
 
     std::string script_test6 =
                         "PUSH 5\n"
                         "PUSH 3\n"
-                        "MUL\n"
-                        "PUSH 4\n"
-                        "MUL\n"
-                        "PUSH 10\n"
-                        "SWAP\n"
-                        "DIV\n";
-                        // 6
+                        "MUL\n"     // 15
+                        "PUSH 4\n"  // 15 4
+                        "MUL\n"     // 60
+                        "PUSH 10\n" // 60 10
+                        "SWAP\n"    // 10 60
+                        "DIV\n";    // 6
+                        // 6*/
 
     
-    engine.loadScript( script_test6 );
+    engine.load_script( script_test6 );
     
-    engine.run();
-
-    std::cout << "stack contains: " << std::endl;
-    display_stack(engine.getStack());
+    engine.compile();
+    std::cout << engine.execute() << std::endl;
 }
 
-void display_stack(const std::stack<int>& _stack)
-{
-    std::stack<int> stack = _stack;
-
-    while(stack.size() != 0)
-    {
-        std::cout << stack.top() << std::endl;
-        stack.pop();
-    }
-}
+/*
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/gcc/x86_64-linux-gnu/6
+export LIBRARY_PATH=${LIBRARY_PATH}:/usr/lib/gcc/x86_64-linux-gnu/6
+export PATH=${PATH}:/usr/lib/gcc/x86_64-linux-gnu/6
+*/
