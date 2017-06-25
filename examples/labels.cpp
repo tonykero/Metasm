@@ -19,5 +19,5 @@ int main()
 
         engine.load_script(script);
         engine.compile();
-        std::cout << engine.execute();
+        std::cout << engine.execute() << std::endl;
 }
