@@ -1,71 +1,37 @@
 #include <Metasm.hpp>
 #include <iostream>
 
-#ifdef __MINGW32__
-    #include <sstream>
-
-    std::string to_string(int i)
-    {
-        std::stringstream ss;
-        ss << i;
-        return ss.str();
-    }
-#endif
-
-void display_stack(const std::stack<int>&);
-
 using namespace std;
 
 int main()
 {
-    meta::Engine engine;
+    meta::Engine engine(4);
 
-    auto square_root = [&engine](int _arg1) -> void
-    {
-        int r1 = _arg1/2;
-        std::string pushARG1    = "PUSH " + to_string(_arg1)+ "\n",
-                    pushR1      = "PUSH " + to_string(r1)   + "\n";
+     //square_root
+    std::string script = 
+                    "PUSH 512\n"      //8
+                    "DUP\n"         //8 8
+                    "PUSH 1024\n"       //8 8 16
+                    "DIV\n"         //8 2
+                    "PUSH 512\n"      //8 2 8
+                    "LBL L1\n"      //          5 5 3       
+                    "ADD\n"         //8 10      5 8         
+                    "PUSH 2\n"      //8 10 1    5 9 1     
+                    "SWAP\n"         //8 5       5 5         
+                    "DIV\n"
+                    "JE EXIT\n"     //                      
+                    "SWAP\n"        //5 8       
+                    "POP\n"         //5         
+                    "DUP\n"         //5 5       
+                    "DUP\n"         //5 5 5     
+                    "PUSH 1024\n"     //5 5 5 16  
+                    "DIV\n"         //5 5 3     
+                    "JNE L1\n"      //                      
+                    "LBL EXIT\n"    //                      
+                    "POP\n";        //
+                    
 
-        std::string script = 
-                        pushR1 +
-                        "DUP\n" +
-                        pushARG1 +
-                        "DIV\n" +
-                        pushR1 +
-                        "LBL L1\n"
-                        "ADD\n"
-                        "PUSH 1\n"
-                        "SHF\n"
-                        "CMP\n"
-                        "JE EXIT\n"
-                        "SWAP\n"
-                        "POP\n"
-                        "DUP\n"
-                        "DUP\n" +
-                        pushARG1 +
-                        "DIV\n"
-                        "JNE L1\n"
-                        "LBL EXIT\n"
-                        "POP\n"; 
-
-        engine.loadScript(script);
-        engine.run();
-    };
-
-    square_root(16); // should be 4
-    square_root(29888089); //should be 5467
-
-    std::cout << "stack contains: " << std::endl;
-    display_stack(engine.getStack());
-}
-
-void display_stack(const std::stack<int>& _stack)
-{
-    std::stack<int> stack = _stack;
-
-    while(stack.size() != 0)
-    {
-        std::cout << stack.top() << std::endl;
-        stack.pop();
-    }
+    engine.load_script(script);
+    engine.compile();
+    std::cout << engine.execute() << std::endl;
 }
