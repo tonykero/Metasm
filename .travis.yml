@@ -8,42 +8,42 @@ matrix:
       addons: &gcc5
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5', 'libgccjit-6-dev']
+          packages: ['g++-5', 'g++-6', 'libgccjit-6-dev']
       env: COMPILER=g++-5
     
     - compiler: gcc
       addons: &gcc6
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6', 'libgccjit-6-dev']
+          packages: ['g++-6', 'g++-6', 'libgccjit-6-dev']
       env: COMPILER=g++-6
     
     - compiler: clang
       addons: &clang36
         apt:
           sources: ['llvm-toolchain-precise-3.6', 'ubuntu-toolchain-r-test']
-          packages: ['clang-3.6', 'libgccjit-6-dev']
+          packages: ['clang-3.6', 'g++-6', 'libgccjit-6-dev']
       env: COMPILER=clang++-3.6
     
     - compiler: clang
       addons: &clang37
         apt:
           sources: ['llvm-toolchain-precise-3.7', 'ubuntu-toolchain-r-test']
-          packages: ['clang-3.7', 'libgccjit-6-dev']
+          packages: ['clang-3.7', 'g++-6', 'libgccjit-6-dev']
       env: COMPILER=clang++-3.7
     
     - compiler: clang
       addons: &clang38
         apt:
           sources: ['llvm-toolchain-precise-3.8', 'ubuntu-toolchain-r-test']
-          packages: ['clang-3.8', 'libgccjit-6-dev']
+          packages: ['clang-3.8', 'g++-6', 'libgccjit-6-dev']
       env: COMPILER=clang++-3.8
 
     - compiler: clang
       addons: &clang39
         apt:
           sources: ['llvm-toolchain-precise-3.9', 'ubuntu-toolchain-r-test']
-          packages: ['clang-3.9', 'libgccjit-6-dev']
+          packages: ['clang-3.9', 'g++-6', 'libgccjit-6-dev']
       env: COMPILER=clang++-3.9
 
 branches:
