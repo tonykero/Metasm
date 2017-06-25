@@ -7,7 +7,7 @@ option(BUILD_EXAMPLES "ON to build examples" ON)
 option(DEBUG "Enable debugging symbols" OFF)
 
 include_directories( "include" )
-
+include_directories( "${GCCJIT_PATH}/include" )
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     
