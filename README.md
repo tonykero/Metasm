@@ -2,6 +2,10 @@
 
 [![license](https://img.shields.io/github/license/tonykero/Metasm.svg?style=flat-square)](https://github.com/tonykero/Metasm/blob/master/LICENSE)
 
+| GCC / Clang (Linux) |
+| :---: |
+| [![Travis](https://img.shields.io/travis/rust-lang/rust.svg?style=flat-square)](https://travis-ci.org/tonykero/Metasm) |
+
 Metasm is a just-in-time compiler written in C++, it fits in 20 instructions.
 
 # Overview
@@ -47,22 +51,30 @@ BUILD_SHARED    | builds Metasm as SHARED if ON | OFF           |
 BUILD_EXAMPLES  | build examples                | ON            |
 DEBUG           | Enable debugging symbols      | OFF           |
 
-may supports(untested consistently):
-* GCC 4.9+
+may supports:
+* GCC
+    * 5
+    * 6
+* Clang
+    * 3.6
+    * 3.7
+    * 3.8
+    * 3.9
+
+let's say GP is the gccjit location where libgccjit.so is located:
 
 ```
 apt-get install libgccjit-6-dev
 git clone https://github.com/tonykero/Metasm.git
 cd Metasm
 mkdir build && cd build
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:PATH WHERE libgccjit.so IS LOCATED
-export LIBRARY_PATH=${LIBRARY_PATH}:PATH WHERE libgccjit.so IS LOCATED
-export PATH=${PATH}:PATH WHERE libgccjit.so IS LOCATED
-cmake .. && cmake --build .
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${GP}
+export LIBRARY_PATH=${LIBRARY_PATH}:${GP}
+export PATH=${PATH}:${GP}
+cmake -DGCCJIT_PATH=${GP} .. && make -j4
 ```
 
-The path i used was /usr/lib/gcc/x86_64-linux-gnu/6
-
+The path i used was /usr/lib/gcc/x86_64-linux-gnu/6 with libgccjit-6-dev
 
 
 ## Examples
