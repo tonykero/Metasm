@@ -62,9 +62,9 @@ before_script:
     - mkdir build && cd build
     - export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/gcc/x86_64-linux-gnu/6
     - export LIBRARY_PATH=${LIBRARY_PATH}:/usr/lib/gcc/x86_64-linux-gnu/6
-    - export PATH=${PATH}:/usr/lib/gcc/x86_64-linux-gnu/6
+    - export PATH=${PATH}:/usr/lib/gcc/x86_64-linux-gnu/6:/usr/lib/gcc/x86_64-linux-gnu/6/include
     - cmake ..;
-      
+    
 script:
     - make -j 2
 
