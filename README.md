@@ -2,9 +2,7 @@
 
 [![license](https://img.shields.io/github/license/tonykero/Metasm.svg?style=flat-square)](https://github.com/tonykero/Metasm/blob/master/LICENSE)
 
-Metasm is a very basic interpreted language, it fits in 16 instructions.
-
-Though it is also an interpreter and a library, written in C++.
+Metasm is a just-in-time compiler written in C++, it fits in 20 instructions.
 
 # Overview
 
@@ -12,54 +10,36 @@ This project is firstly made to be used with [Moe](https://github.com/tonykero/M
 but since i'm writing Moe and Metasm in a generic way, i found legitimate to create a repository for each.
 
 
-There is only 1 class for the moment, and 2 main functions to remember.
-
 ```cpp
 #include <Metasm.hpp>
 #include <iostream>
 
-void display_stack(const std::stack<int>&);
-
 int main()
 {
-    meta::Engine engine;
+    meta::Engine engine(5);
 
     std::string script_test6 =
-                        "PUSH 5\n"
-                        "PUSH 3\n"
-                        "MUL\n"
-                        "PUSH 4\n"
-                        "MUL\n"
-                        "PUSH 10\n"
-                        "SWAP\n"
-                        "DIV\n";
+                        "PUSH 5\n"  // 5
+                        "PUSH 3\n"  // 5 3
+                        "MUL\n"     // 15
+                        "PUSH 4\n"  // 15 4
+                        "MUL\n"     // 60
+                        "PUSH 10\n" // 60 10
+                        "SWAP\n"    // 10 60
+                        "DIV\n";    // 6
+                        // 6
+
     
-    engine.loadScript( script_test6 );
+    engine.load_script( script_test6 );
     
-    engine.run();
-
-    std::cout << "stack contains: " << std::endl;
-    display_stack(engine.getStack());
-}
-
-void display_stack(const std::stack<int>& _stack)
-{
-    std::stack<int> stack = _stack;
-
-    while(stack.size() != 0)
-    {
-        std::cout << stack.top() << std::endl;
-        stack.pop();
-    }
+    engine.compile();
+    std::cout << engine.execute() << std::endl;
 }
 ```
 
-The only class is Engine, and the 2 functions are `loadScript()` & `run()`
-the internal container used to store immediates values and results, is indeed a `std::stack<int>`, for now it only supports ints
-
 ## Building
 
-Metasm uses CMake
+Metasm uses CMake, and requires libgccjit installed
 
 Options         | Description                   | Default Value |
 --------------- | ----------------------------- | ------------- |
@@ -68,15 +48,22 @@ BUILD_EXAMPLES  | build examples                | ON            |
 DEBUG           | Enable debugging symbols      | OFF           |
 
 may supports(untested consistently):
-* Clang 3.4+
 * GCC 4.9+
-* MSVC (19.0)
 
 ```
+apt-get install libgccjit-6-dev
 git clone https://github.com/tonykero/Metasm.git
 cd Metasm
-mkdir build && cd build && cmake .. && cmake --build .
+mkdir build && cd build
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:PATH WHERE libgccjit.so IS LOCATED
+export LIBRARY_PATH=${LIBRARY_PATH}:PATH WHERE libgccjit.so IS LOCATED
+export PATH=${PATH}:PATH WHERE libgccjit.so IS LOCATED
+cmake .. && cmake --build .
 ```
+
+The path i used was /usr/lib/gcc/x86_64-linux-gnu/6
+
+
 
 ## Examples
 
