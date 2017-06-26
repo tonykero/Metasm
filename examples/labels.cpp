@@ -15,9 +15,12 @@ int main()
                     "JMP EXIT\n"
                     "LBL EQUAL\n"
                     "PUSH 1\n"
-                    "LBL EXIT\n";
+                    "LBL EXIT\n"
+                    "PRINT\n";
 
-        engine.load_script(script);
-        engine.compile();
-        std::cout << engine.execute() << std::endl;
+    engine.load_script(script);
+
+    std::function<int(void)> function = engine.compile();
+    std::cout << function() << std::endl;
+    engine.compile("lbl", true);
 }

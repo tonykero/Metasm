@@ -32,10 +32,12 @@ int main()
                     "JMP L1\n"  
                     "LBL EXIT\n"            // 4 16 16
                     "POP\n"                 // 4 16
-                    "POP\n";                // 4
-                                            // but outputs 5 ¯\_(ツ)_/¯
+                    "POP\n"                 // 4
+                    "PRINT\n";              // but outputs 5 ¯\_(ツ)_/¯
 
     engine.load_script(script);
-    engine.compile();
-    std::cout << engine.execute() << std::endl;
+
+    std::function<int(void)> function = engine.compile();
+    std::cout << function() << std::endl;
+    engine.compile( "sqrt", true );
 }

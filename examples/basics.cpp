@@ -13,14 +13,17 @@ int main()
                         "MUL\n"     // 60
                         "PUSH 10\n" // 60 10
                         "SWAP\n"    // 10 60
-                        "DIV\n";    // 6
+                        "DIV\n"    // 6
+                        "PRINT\n";
                         // 6*/
 
     
     engine.load_script( script_test6 );
     
-    engine.compile();
-    std::cout << engine.execute() << std::endl;
+    std::function<int(void)> function = engine.compile();
+    std::cout << function() << std::endl;
+    engine.compile( "basics-output", true );
+    
 }
 
 /*
