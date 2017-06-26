@@ -20,24 +20,28 @@ but since i'm writing Moe and Metasm in a generic way, i found legitimate to cre
 
 int main()
 {
-    meta::Engine engine(5); //the stack array is 5 elements long
+    meta::Engine engine(5);
 
     std::string script_test6 =
-                        "PUSH 5\n"  // 5
-                        "PUSH 3\n"  // 5 3
+                        "PUSH 5\n"
+                        "PUSH 3\n"
                         "MUL\n"     // 15
                         "PUSH 4\n"  // 15 4
                         "MUL\n"     // 60
                         "PUSH 10\n" // 60 10
                         "SWAP\n"    // 10 60
-                        "DIV\n";    // 6
+                        "DIV\n"    // 6
+                        "PRINT\n";
                         // 6
 
     
     engine.load_script( script_test6 );
     
-    engine.compile();
-    std::cout << engine.execute() << std::endl;
+    std::function<int(void)> function = engine.compile(); // in-memory compilation
+    std::cout << function() << std::endl;
+
+    engine.compile( "basics-output", true ); // generates executable and assembly file from it
+    
 }
 ```
 
