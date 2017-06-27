@@ -49,8 +49,6 @@ class Engine
         Engine  ( unsigned int _maxStackDepth );
         ~Engine ();
 
-        void                        init_blocks ();
-
         bool                        is_valid    ( const std::string& _script );
         void                        load_script ( const std::string& _script );
         std::function<int(void)>    compile     ();
@@ -64,7 +62,8 @@ class Engine
         std::vector<std::string>    split       ( const std::string& _script, const char& _delim );
         unsigned int                scan        ( const std::string& );
         void                        parse_labels();
-
+        void                        init_blocks ();
+        
         std::string                 m_script;
 
         gccjit::context             m_context;
@@ -83,6 +82,9 @@ class Engine
                                     m_x,
                                     m_y,
                                     m_ret;
+
+        std::array<gccjit::lvalue, 4>
+                                    m_registers;
 
 
         gccjit::rvalue              m_const_one;

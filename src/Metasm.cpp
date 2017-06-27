@@ -19,8 +19,15 @@ m_ret           ( m_function.new_local( m_int_type, "ret" )),
 m_const_one     ( m_context.one(m_int_type)),
 m_initial_block ( m_function.new_block("initial"))
 {
+    unsigned int id = 0;
+    for( gccjit::lvalue& reg : m_registers )
+    {
+        reg = m_function.new_local( m_int_type, "reg" + std::to_string(id) );
+        id++;
+    }
     //m_context.set_bool_option   (GCC_JIT_BOOL_OPTION_DUMP_GENERATED_CODE, 0);
     m_context.set_int_option    (GCC_JIT_INT_OPTION_OPTIMIZATION_LEVEL, 3);
+    //m_context.set_bool_allow_unreachable_blocks(true);
 
 }
 
@@ -89,6 +96,21 @@ std::function<int(void)> Engine::compile( )
             case INST_POP:
                 m_actual_block.add_assignment_op( m_stack_depth, GCC_JIT_BINARY_OP_MINUS, m_const_one );
                 break;
+            case INST_LOAD:
+                {
+                    args[1].erase(args[1].begin());
+                    unsigned int register_id = std::stoi(args[1]);
+                    push( m_registers[register_id] );
+                }
+                break;
+            case INST_STORE:
+                {
+                    args[1].erase(args[1].begin());
+                    unsigned int register_id = std::stoi(args[1]);
+                    pop( m_x );
+                    m_actual_block.add_assignment( m_registers[register_id], m_x );
+                }
+                break;
             case INST_SWAP:
                 pop(m_x);
                 pop(m_y);
@@ -147,13 +169,13 @@ std::function<int(void)> Engine::compile( )
                 push(~m_x);
                 break;
             case INST_SHR:
-                pop(m_y);
                 pop(m_x);
+                pop(m_y);
                 push( m_context.new_binary_op(GCC_JIT_BINARY_OP_RSHIFT, m_int_type, m_x, m_y));
                 break;
             case INST_SHL:
-                pop(m_y);
                 pop(m_x);
+                pop(m_y);
                 push( m_context.new_binary_op(GCC_JIT_BINARY_OP_LSHIFT, m_int_type, m_x, m_y));
                 break;
             // jumps
@@ -265,6 +287,8 @@ unsigned int Engine::scan( const std::string& _instruction )
     unsigned int inst_id = 0x00;
     (_instruction == "PUSH" )   && ( inst_id= INST_PUSH );
     (_instruction == "POP"  )   && ( inst_id= INST_POP  );
+    (_instruction == "LOAD" )   && ( inst_id= INST_LOAD );
+    (_instruction == "STORE")   && ( inst_id= INST_STORE  );
     (_instruction == "SWAP" )   && ( inst_id= INST_SWAP );
     (_instruction == "DUP"  )   && ( inst_id= INST_DUP  );
     (_instruction == "ADD"  )   && ( inst_id= INST_ADD  );
