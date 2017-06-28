@@ -9,6 +9,10 @@ option(DEBUG "Enable debugging symbols" OFF)
 include_directories( "include" )
 include_directories( "${GCCJIT_PATH}/include" )
 
+if( BUILD_TESTS OR COVERAGE )
+    include_directories( "3rd/Catch/include" )
+endif()
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     
     # using GCC
@@ -70,4 +74,13 @@ if(BUILD_EXAMPLES)
 
     add_executable(square_root ${SOURCE})
     target_link_libraries(square_root ${LINK_LIBS})
-endif() 
+endif()
+
+if(BUILD_TESTS OR COVERAGE)
+    set(SOURCE
+        "tests/tests.cpp"
+        )
+
+    add_executable(tests ${SOURCE})
+    target_link_libraries(tests ${LINK_LIBS})
+endif()
