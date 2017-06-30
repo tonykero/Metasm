@@ -37,8 +37,9 @@
 #define INST_JNE        0x16
 #define INST_JGE        0x17
 #define INST_JLE        0x18
+#define INST_RET        0x19
 // io
-#define INST_PRINT      0x19
+#define INST_PRINT      0x1A
 
 namespace meta
 {
@@ -58,6 +59,7 @@ class Engine
 
         void                        push        ( gccjit::rvalue _arg );
         void                        pop         ( gccjit::lvalue _arg );
+        void                        retlast     ();
 
         std::vector<std::string>    split       ( const std::string& _script, const char& _delim );
         unsigned int                scan        ( const std::string& );

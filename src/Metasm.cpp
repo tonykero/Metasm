@@ -180,7 +180,7 @@ std::function<int(void)> Engine::compile( )
                 break;
             // jumps
             case INST_LBL:
-                // do nothing
+                // do nothing because pre-processed
                 break;
             case INST_JMP:
                 m_actual_block.end_with_jump( m_instruction_blocks[ m_labels[arg] ] );
@@ -213,6 +213,9 @@ std::function<int(void)> Engine::compile( )
                 push(m_x);
                 m_actual_block.end_with_conditional( m_x <= m_y, m_instruction_blocks[ m_labels[arg] ], m_next_block );
                 break;
+            case INST_RET:
+                retlast();
+                break;
             // io
             case INST_PRINT:
                 pop(m_x);
@@ -220,7 +223,7 @@ std::function<int(void)> Engine::compile( )
                 m_actual_block.add_eval( m_context.new_call( m_print, m_context.new_rvalue("topmost value: %i\n"), m_x));
                 break;
             default:
-                // instruction not found, can't be reached
+                // instruction not found, can't be reached because of is_valid()
                 break;
         }
     
@@ -228,20 +231,16 @@ std::function<int(void)> Engine::compile( )
             instruction_id != INST_JE   &&
             instruction_id != INST_JNE  &&
             instruction_id != INST_JGE  &&
-            instruction_id != INST_JLE )
+            instruction_id != INST_JLE  &&
+            instruction_id != INST_RET )
         {
             if(m_valid_next)
                 m_actual_block.end_with_jump( m_next_block );
             else
             {
-                m_actual_block.add_assignment_op( m_stack_depth, GCC_JIT_BINARY_OP_MINUS, m_const_one);
-                m_actual_block.add_assignment( m_ret, m_context.new_array_access( m_stack, m_stack_depth ) );
-                m_actual_block.end_with_return( m_ret );
+                retlast();
             }
         }
-    
-    //gccjit::context
-
     }
     m_result = m_context.compile();
 
@@ -268,6 +267,13 @@ void Engine::pop( gccjit::lvalue _arg )
 {
     m_actual_block.add_assignment_op( m_stack_depth, GCC_JIT_BINARY_OP_MINUS, m_const_one );
     m_actual_block.add_assignment( _arg, m_context.new_array_access( m_stack, m_stack_depth ) );
+}
+
+void Engine::retlast()
+{
+    m_actual_block.add_assignment_op( m_stack_depth, GCC_JIT_BINARY_OP_MINUS, m_const_one);
+    m_actual_block.add_assignment( m_ret, m_context.new_array_access( m_stack, m_stack_depth ) );
+    m_actual_block.end_with_return( m_ret );
 }
 
 std::vector<std::string> Engine::split( const std::string& _script, const char& _delim )
@@ -308,6 +314,7 @@ unsigned int Engine::scan( const std::string& _instruction )
     (_instruction == "JNE"  )   && ( inst_id= INST_JNE  );
     (_instruction == "JGE"  )   && ( inst_id= INST_JGE  );
     (_instruction == "JLE"  )   && ( inst_id= INST_JLE  );
+    (_instruction == "RET"  )   && ( inst_id= INST_RET  );
     (_instruction == "PRINT")   && ( inst_id= INST_PRINT);
 
     return inst_id;
