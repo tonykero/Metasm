@@ -121,7 +121,6 @@ std::function<int(void)> Engine::compile( )
                 pop(m_x);
                 push(m_x);
                 push(m_x);
-                push(m_x);
                 break;
             // arithmetic
             case INST_ADD:
